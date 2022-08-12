@@ -1,6 +1,12 @@
 <template>
   <div class="h-screen relative">
-    <GeoErrorModal />
+    <GeoErrorModal 
+    v-if="geoError" 
+    :geoErrorMsg="geoErrorMsg" 
+    @closeGeoError="closeGeoError" />
+
+    <MapFeatures />
+
     <div id="map" class="h-full z-[1]"></div>
   </div>
 </template>
@@ -9,11 +15,13 @@
 import leaflet from "leaflet";
 import { onMounted, ref } from "vue";
 import GeoErrorModal from '@/components/GeoErrorModal.vue';
+import MapFeatures from '@/components/MapFeatures.vue';
 
 export default {
   name: 'HomeView',
   components: {
-    GeoErrorModal
+    GeoErrorModal,
+    MapFeatures
   },
   setup() {
     let map;
@@ -41,7 +49,7 @@ export default {
     const fetchCoords = ref(null);
     const geoMarker = ref(null);
     const geoError = ref(null);
-    const geoErrorMsg = ref(null);
+    const geoErrorMsg = ref('testing v-bind on modal');
 
     const getGeoLocation = () => {
       // check session storage for coords
@@ -102,7 +110,7 @@ export default {
       geoErrorMsg.value = null;
     };
 
-    return { coords, geoMarker, closeGeoError };
+    return { coords, geoMarker, closeGeoError, geoError, geoErrorMsg };
   },
 };
 </script>
